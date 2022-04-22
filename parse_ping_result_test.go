@@ -6,15 +6,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var strReceived = `PING test.domain.go (127.0.0.1): 56 data bytes
-	64 bytes from 127.0.0.1: icmp_seq=0 ttl=48 time=39.846 ms
-	64 bytes from 127.0.0.1: icmp_seq=1 ttl=48 time=58.014 ms
-	^C
-	--- test.domain.go ping statistics ---
-	2 packets transmitted, 2 packets received, 0.0% packet loss
-	round-trip min/avg/max/stddev = 39.846/48.930/58.014/9.084 ms`
+var strReceivedDebian = `PING google.com (127.0.0.1) 56(84) bytes of data.
+64 bytes from 127.0.0.1 (127.0.0.1): icmp_seq=1 ttl=57 time=43.8 ms
+64 bytes from 127.0.0.1 (127.0.0.1): icmp_seq=2 ttl=57 time=43.6 ms
+64 bytes from 127.0.0.1 (127.0.0.1): icmp_seq=3 ttl=57 time=43.6 ms
 
-var strLost = `PING test.domain.go (127.0.0.1): 56 data bytes
+--- google.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 43.594/43.687/43.830/0.102 ms`
+
+var strLostMacOs = `PING test.domain.go (127.0.0.1): 56 data bytes
 	64 bytes from 127.0.0.1: icmp_seq=0 ttl=48 time=39.846 ms
 	64 bytes from 127.0.0.1: icmp_seq=1 ttl=48 time=58.014 ms
 	^C
@@ -23,7 +24,7 @@ var strLost = `PING test.domain.go (127.0.0.1): 56 data bytes
 	round-trip min/avg/max/stddev = 39.846/48.930/58.014/9.084 ms`
 
 func TestParseReceivedPackets(t *testing.T) {
-	result, err := ParsePingResult(strReceived)
+	result, _, err := ParsePingResult(strReceivedDebian)
 	assert.Nil(t, err)
 	var pingResult *PingResult = &PingResult{
 		Received: 2,
@@ -33,7 +34,7 @@ func TestParseReceivedPackets(t *testing.T) {
 }
 
 func TestParseLossPingPackets(t *testing.T) {
-	result, err := ParsePingResult(strLost)
+	result, _, err := ParsePingResult(strLostMacOs)
 	assert.Nil(t, err)
 	var pingResult *PingResult = &PingResult{
 		Received: 0,
