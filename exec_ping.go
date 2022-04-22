@@ -20,8 +20,9 @@ func getErrorStr(stdout string, strerr string, anyStr string) string {
 	return fmt.Sprintf("stdout: %s; stderr: %s; more: %s", stdout, strerr, anyStr)
 }
 
-func Run(host string, attempt int16, timeoutSeconds int16) (*PingResult, error) {
-	cmd := exec.Command("ping", host, "-c", fmt.Sprint(attempt), "-t", fmt.Sprint(timeoutSeconds))
+func Run(host string, args ...string) (*PingResult, error) {
+	args = append(args, host)
+	cmd := exec.Command("ping", args...)
 	var stdout bytes.Buffer
 	var strerr bytes.Buffer
 	cmd.Stdout = &stdout

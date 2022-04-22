@@ -7,7 +7,7 @@ import (
 )
 
 func TestExecPingSuccess(t *testing.T) {
-	pingResult, err := Run("google.com", 3, 5)
+	pingResult, err := Run("google.com", "-c", "3")
 	assert.Nil(t, err)
 	var pr *PingResult = &PingResult{
 		Received: 3,
@@ -17,6 +17,6 @@ func TestExecPingSuccess(t *testing.T) {
 }
 
 func TestExecPingFailed(t *testing.T) {
-	_, err := Run("use-case.ru", 3, 5)
+	_, err := Run("use-case.ru", "-c", "3")
 	assert.NotNil(t, err)
 }
