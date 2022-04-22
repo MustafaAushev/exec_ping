@@ -26,7 +26,6 @@ func Run(host string, attempt int16, timeoutSeconds int16) (*PingResult, error, 
 		return nil, errRuning, errors.New("Empty output ping")
 	}
 	pingResult, err := ParsePingResult(outString)
-	fmt.Print(pingResult.Received, pingResult.Loss, "\n")
 	if err != nil {
 		return pingResult, errRuning, err
 	}
