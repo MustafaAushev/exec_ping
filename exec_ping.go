@@ -2,6 +2,7 @@ package exec_ping
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os/exec"
 )
@@ -16,7 +17,12 @@ func Run(host string, attempt int16, timeoutSeconds int16) (*PingResult, error, 
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	errRuning := cmd.Run()
-	pingResult, err := ParsePingResult(out.String())
+	outString := out.String()
+	if outString == "" {
+		return nil, errRuning, errors.New("Empty output")
+	}
+	pingResult, err := ParsePingResult(outString)
+	fmt.Print(pingResult.Received, pingResult.Loss, "\n")
 	if err != nil {
 		return pingResult, errRuning, err
 	}

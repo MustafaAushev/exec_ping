@@ -1,6 +1,7 @@
 package exec_ping
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 )
@@ -20,6 +21,9 @@ func ParsePingResult(str string) (*PingResult, error) {
 func ParsePackets(str string) (int16, int16, error) {
 	regPackets := regexp.MustCompile(`\d+ packets transmitted, \d+ packets received`)
 	packets := regPackets.FindString(str)
+	if packets == "" {
+		return 0, 0, errors.New("Not parsing ping output")
+	}
 	regPacketsNumber := regexp.MustCompile(`\d+`)
 	packetsNumber := regPacketsNumber.FindAllString(packets, 2)
 	transmitted, err := strconv.Atoi(packetsNumber[0])
