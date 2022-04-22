@@ -11,17 +11,14 @@ type PingResult struct {
 	Loss     int16
 }
 
-func Run(host string, attempt int16, timeoutSeconds int16) (*PingResult, error) {
+func Run(host string, attempt int16, timeoutSeconds int16) (*PingResult, error, error) {
 	cmd := exec.Command("ping", host, "-c", fmt.Sprint(attempt), "-t", fmt.Sprint(timeoutSeconds))
 	var out bytes.Buffer
 	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		return nil, err
-	}
+	errRuning := cmd.Run()
 	pingResult, err := ParsePingResult(out.String())
 	if err != nil {
-		return pingResult, err
+		return pingResult, errRuning, err
 	}
-	return pingResult, nil
+	return pingResult, errRuning, nil
 }
