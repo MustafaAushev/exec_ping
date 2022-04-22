@@ -19,7 +19,7 @@ func Run(host string, attempt int16, timeoutSeconds int16) (*PingResult, error, 
 	errRuning := cmd.Run()
 	outString := out.String()
 	if outString == "" {
-		return nil, errRuning, errors.New("Empty output")
+		return nil, errRuning, errors.New("Empty output ping")
 	}
 	pingResult, err := ParsePingResult(outString)
 	fmt.Print(pingResult.Received, pingResult.Loss, "\n")
